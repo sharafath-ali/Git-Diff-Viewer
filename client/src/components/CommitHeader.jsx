@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function CommitHeader({ commit, owner, repository }) {
   const [copied, setCopied] = useState(false);
@@ -90,14 +91,14 @@ function CommitHeader({ commit, owner, repository }) {
             <span className="commit-sha-label">Parent</span>
             <span>
               {commit.parents.map((parent, i) => (
-                <a
+                <Link
                   key={parent.oid}
-                  href={`/repositories/${owner}/${repository}/commit/${parent.oid}`}
+                  to={`/repositories/${owner}/${repository}/commit/${parent.oid}`}
                   className="parent-sha-link"
                   id={`parent-sha-${i}`}
                 >
-                  {parent.oid}
-                </a>
+                  {parent.oid.slice(0, 7)}
+                </Link>
               ))}
             </span>
           </div>

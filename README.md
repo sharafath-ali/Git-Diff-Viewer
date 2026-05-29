@@ -1,18 +1,21 @@
 # Git Diff Viewer
 
-A full-stack MERN application that displays code differences for any given commit from any open-source GitHub repository.
+A full-stack web application that displays code differences for any given commit from any open-source GitHub repository. Features a premium landing page with a navigation form so you can explore any commit without constructing URLs manually.
 
 ## Tech Stack
 
-- **Frontend**: React 18, Vite, React Router v6, Vanilla CSS
-- **Backend**: Node.js, Express, Axios
-- **API**: GitHub REST API v3
+| Layer    | Technology                          |
+|----------|-------------------------------------|
+| Frontend | React 18, Vite, React Router v6, Vanilla CSS |
+| Backend  | Node.js, Express, Axios             |
+| API      | GitHub REST API v3                  |
+| Proxy    | Vite dev proxy (eliminates CORS)    |
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) (v18+)
-- npm (v9+)
-- (Optional) [GitHub Personal Access Token](https://github.com/settings/tokens) for higher rate limits
+- [Node.js](https://nodejs.org/) v18 or later
+- npm v9 or later
+- (Optional but **recommended**) [GitHub Personal Access Token](https://github.com/settings/tokens)
 
 ## Quick Start
 
@@ -22,26 +25,38 @@ A full-stack MERN application that displays code differences for any given commi
 npm run install:all
 ```
 
-### 2. (Optional) Configure GitHub Token
+### 2. Configure GitHub Token (optional but recommended)
 
-Create/edit `server/.env`:
+Without a token the GitHub API is limited to **60 req/hour**. With one you get **5 000 req/hour**.
+
+Edit `server/.env`:
+
 ```env
 GITHUB_TOKEN=your_github_personal_access_token
 PORT=5000
 ```
 
-### 3. Run the application
+### 3. Start both servers
 
 ```bash
 npm run dev
 ```
 
-This starts both servers:
-- **Frontend**: http://localhost:1234
-- **Backend**: http://localhost:5000
+This starts:
 
-### 4. Open in browser
+| Service  | URL                          |
+|----------|------------------------------|
+| Frontend | http://localhost:1234        |
+| Backend  | http://localhost:5000        |
 
+### 4. Use the app
+
+Open **http://localhost:1234** in your browser.
+
+**Option A — Navigation form (recommended)**  
+Use the form on the landing page: enter a GitHub **owner**, **repository**, and full 40-character **commit SHA**, then click *View Diff*.
+
+**Option B — Direct URL**  
 Navigate to:
 ```
 http://localhost:1234/repositories/:owner/:repository/commit/:commitSHA
@@ -56,8 +71,8 @@ http://localhost:1234/repositories/golemfactory/clay/commit/a1bf367b3af680b1182c
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/repositories/:owner/:repo/commits/:oid` | Get commit metadata |
-| GET | `/repositories/:owner/:repo/commits/:oid/diff` | Get commit diff |
+| `GET` | `/api/repositories/:owner/:repo/commits/:oid` | Commit metadata |
+| `GET` | `/api/repositories/:owner/:repo/commits/:oid/diff` | Parsed diff |
 
 ## Project Structure
 
@@ -67,24 +82,28 @@ gitdiff/
 │   ├── src/
 │   │   ├── index.js              # Express entry point
 │   │   ├── routes/commits.js     # API route handlers
-│   │   └── services/github.js    # GitHub API integration + diff parser
-│   ├── .env                      # Environment config
+│   │   └── services/github.js    # GitHub API + diff parser
+│   ├── .env                      # Environment config (add GITHUB_TOKEN here)
 │   └── package.json
 ├── client/
 │   ├── src/
 │   │   ├── main.jsx              # React entry point
-│   │   ├── App.jsx               # Router setup
-│   │   ├── index.css             # Global styles
+│   │   ├── App.jsx               # Router + landing page
+│   │   ├── index.css             # Global design system
 │   │   ├── hooks/useCommit.js    # Data fetching hook
-│   │   ├── pages/CommitPage.jsx  # Commit page
+│   │   ├── pages/CommitPage.jsx  # Commit diff page
 │   │   └── components/
+│   │       ├── NavigateForm.jsx  # Landing page navigation form
 │   │       ├── CommitHeader.jsx  # Commit metadata display
-│   │       ├── DiffViewer.jsx    # File list with diffs
-│   │       ├── DiffHunk.jsx      # Individual diff hunk
-│   │       └── FileBadge.jsx     # Change type badge
-├── SOLUTION.md
+│   │       ├── DiffViewer.jsx    # Collapsible file list
+│   │       ├── DiffHunk.jsx      # Unified diff hunk
+│   │       └── FileBadge.jsx     # Change type badge (A/M/D/R/C)
+│   ├── index.html
+│   ├── vite.config.js            # Vite + dev proxy config
+│   └── package.json
+├── SOLUTION.md                   # Architecture notes & trade-offs
 ├── README.md
-└── package.json
+└── package.json                  # Root workspace scripts
 ```
 
 ## Packaging
@@ -92,6 +111,8 @@ gitdiff/
 ```bash
 npm pack
 ```
+
+This creates a `.tgz` archive excluding `node_modules` (via `.gitignore`/`npmignore`).
 
 ## License
 
