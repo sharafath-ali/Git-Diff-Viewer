@@ -9,16 +9,16 @@ const EXAMPLES = [
     sha: 'a1bf367b3af680b1182cc52bb77ba095764a11f9',
   },
   {
-    label: 'facebook/react',
-    owner: 'facebook',
-    repo: 'react',
-    sha: 'b6978bc38f6788c7e73982b9fd2771aabdf36f15',
+    label: 'sharafath-ali/NexBuy',
+    owner: 'sharafath-ali',
+    repo: 'NexBuy',
+    sha: '9fa18e8988c932e01632bfc9bde6f6dc5ec2e34e',
   },
   {
-    label: 'vuejs/vue',
-    owner: 'vuejs',
-    repo: 'vue',
-    sha: 'c58a5c8be91e1e57c5c2ee6767dcf18e4dbc8f84',
+    label: 'sharafath-ali/Chatterverse',
+    owner: 'sharafath-ali',
+    repo: 'Chatterverse',
+    sha: '89a7dc8c06130acf154ad7b922a37b508511c5c8',
   },
 ];
 
