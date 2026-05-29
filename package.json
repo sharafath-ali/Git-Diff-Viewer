@@ -1,0 +1,16 @@
+{
+  "name": "git-diff-viewer",
+  "version": "1.0.0",
+  "description": "A full-stack web application that shows code differences for any given commit from any open source GitHub repository",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": ["git", "diff", "viewer", "commit", "github"],
+  "license": "MIT"
+}

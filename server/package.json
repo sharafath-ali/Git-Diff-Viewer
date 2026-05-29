@@ -1,0 +1,16 @@
+{
+  "name": "git-diff-server",
+  "version": "1.0.0",
+  "description": "Express API server for Git Diff Viewer",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
