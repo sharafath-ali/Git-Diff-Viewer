@@ -10,14 +10,21 @@ router.get('/:owner/:repository/commits/:oid', async (req, res, next) => {
   try {
     const { owner, repository, oid } = req.params;
 
+    // Validate all params are present and non-empty
+    if (!owner?.trim() || !repository?.trim() || !oid?.trim()) {
+      return res.status(400).json({
+        error: 'Missing required parameters: owner, repository, and commit SHA are all required.',
+      });
+    }
+
     // Validate SHA format
-    if (!/^[0-9a-f]{40}$/i.test(oid)) {
+    if (!/^[0-9a-f]{40}$/i.test(oid.trim())) {
       return res.status(400).json({
         error: 'Invalid commit SHA. Must be a 40-character hexadecimal string.',
       });
     }
 
-    const commit = await getCommit(owner, repository, oid);
+    const commit = await getCommit(owner.trim(), repository.trim(), oid.trim());
     res.json(commit);
   } catch (error) {
     if (error.response) {
@@ -43,14 +50,21 @@ router.get('/:owner/:repository/commits/:oid/diff', async (req, res, next) => {
   try {
     const { owner, repository, oid } = req.params;
 
+    // Validate all params are present and non-empty
+    if (!owner?.trim() || !repository?.trim() || !oid?.trim()) {
+      return res.status(400).json({
+        error: 'Missing required parameters: owner, repository, and commit SHA are all required.',
+      });
+    }
+
     // Validate SHA format
-    if (!/^[0-9a-f]{40}$/i.test(oid)) {
+    if (!/^[0-9a-f]{40}$/i.test(oid.trim())) {
       return res.status(400).json({
         error: 'Invalid commit SHA. Must be a 40-character hexadecimal string.',
       });
     }
 
-    const diff = await getCommitDiff(owner, repository, oid);
+    const diff = await getCommitDiff(owner.trim(), repository.trim(), oid.trim());
     res.json(diff);
   } catch (error) {
     if (error.response) {
