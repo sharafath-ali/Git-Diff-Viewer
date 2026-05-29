@@ -3,16 +3,21 @@ import { useState } from 'react';
 function CommitHeader({ commit, owner, repository }) {
   const [copied, setCopied] = useState(false);
 
-  const shortSHA = commit.oid.substring(0, 7);
-  const commitDate = new Date(commit.author.date);
-  const relativeDate = getRelativeTime(commitDate);
-
   // Split message into subject and body
   const messageParts = commit.message.split('\n');
   const subject = messageParts[0];
   const body = messageParts.slice(1).join('\n').trim();
 
-  const [showFullMessage, setShowFullMessage] = useState(false);
+  const commitDate = new Date(commit.author.date);
+  const authorRelative = getRelativeTime(commitDate);
+
+  // Committer info (may differ from author)
+  const committerName = commit.committer?.name || commit.author.name;
+  const committerDate = commit.committer?.date
+    ? new Date(commit.committer.date)
+    : commitDate;
+  const committerRelative = getRelativeTime(committerDate);
+  const showCommitter = committerName !== commit.author.name;
 
   function handleCopySHA() {
     navigator.clipboard.writeText(commit.oid).then(() => {
@@ -23,94 +28,80 @@ function CommitHeader({ commit, owner, repository }) {
 
   return (
     <div className="commit-header" id="commit-header">
-      <div className="commit-header-top">
-        <div className="commit-message-section">
-          <h1 className="commit-subject" id="commit-subject">{subject}</h1>
-          {body && (
-            <>
-              <button
-                className="toggle-message-btn"
-                onClick={() => setShowFullMessage(!showFullMessage)}
-                id="toggle-message-btn"
-              >
-                {showFullMessage ? '▲ Hide details' : '▼ Show details'}
-              </button>
-              {showFullMessage && (
-                <pre className="commit-body" id="commit-body">{body}</pre>
-              )}
-            </>
-          )}
-        </div>
+      {/* Avatar column */}
+      <div className="commit-avatar-col">
+        {commit.avatarUrl ? (
+          <img
+            src={commit.avatarUrl}
+            alt={commit.author.name}
+            className="author-avatar"
+            id="author-avatar"
+          />
+        ) : (
+          <div className="author-avatar-placeholder" id="author-avatar-placeholder">
+            {commit.author.name.charAt(0).toUpperCase()}
+          </div>
+        )}
       </div>
 
-      <div className="commit-meta">
-        <div className="commit-author-section">
-          {commit.avatarUrl && (
-            <img
-              src={commit.avatarUrl}
-              alt={commit.author.name}
-              className="author-avatar"
-              id="author-avatar"
-            />
-          )}
-          {!commit.avatarUrl && (
-            <div className="author-avatar-placeholder" id="author-avatar-placeholder">
-              {commit.author.name.charAt(0).toUpperCase()}
-            </div>
-          )}
-          <div className="author-info">
-            <span className="author-name" id="author-name">{commit.author.name}</span>
-            <span className="author-email">{commit.author.email}</span>
-          </div>
+      {/* Main column: subject + author + body */}
+      <div className="commit-main-col">
+        <h1 className="commit-subject" id="commit-subject">
+          {subject}
+        </h1>
+        <p className="commit-author-line">
+          Authored by <strong>{commit.author.name}</strong> {authorRelative}
+        </p>
+        {body && (
+          <p className="commit-body-text" id="commit-body">
+            {body}
+          </p>
+        )}
+      </div>
+
+      {/* Right column: committer + commit hash + parent */}
+      <div className="commit-right-col">
+        {showCommitter && (
+          <p className="commit-committer-line">
+            Committed by <strong>{committerName}</strong> {committerRelative}
+          </p>
+        )}
+        {!showCommitter && (
+          <p className="commit-committer-line">
+            Committed by <strong>{committerName}</strong> {committerRelative}
+          </p>
+        )}
+
+        <div className="commit-sha-row">
+          <span className="commit-sha-label">Commit</span>
+          <span
+            className="commit-sha-hash"
+            onClick={handleCopySHA}
+            title="Click to copy full SHA"
+            id="commit-sha"
+          >
+            {commit.oid}
+            {copied && <span className="copied-tooltip">Copied!</span>}
+          </span>
         </div>
 
-        <div className="commit-details">
-          <div className="commit-sha-row">
-            <span className="detail-label">Commit</span>
-            <button
-              className="sha-badge"
-              onClick={handleCopySHA}
-              title="Click to copy full SHA"
-              id="sha-badge"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-              </svg>
-              <code>{shortSHA}</code>
-              {copied && <span className="copied-tooltip">Copied!</span>}
-            </button>
+        {commit.parents && commit.parents.length > 0 && (
+          <div className="commit-parent-row">
+            <span className="commit-sha-label">Parent</span>
+            <span>
+              {commit.parents.map((parent, i) => (
+                <a
+                  key={parent.oid}
+                  href={`/repositories/${owner}/${repository}/commit/${parent.oid}`}
+                  className="parent-sha-link"
+                  id={`parent-sha-${i}`}
+                >
+                  {parent.oid}
+                </a>
+              ))}
+            </span>
           </div>
-
-          <div className="commit-date-row">
-            <span className="detail-label">Committed</span>
-            <time
-              dateTime={commit.author.date}
-              title={commitDate.toLocaleString()}
-              className="commit-date"
-              id="commit-date"
-            >
-              {relativeDate}
-            </time>
-          </div>
-
-          {commit.parents && commit.parents.length > 0 && (
-            <div className="commit-parents-row">
-              <span className="detail-label">Parent{commit.parents.length > 1 ? 's' : ''}</span>
-              <div className="parent-shas">
-                {commit.parents.map((parent) => (
-                  <a
-                    key={parent.oid}
-                    href={`/repositories/${owner}/${repository}/commit/${parent.oid}`}
-                    className="parent-sha-link"
-                  >
-                    <code>{parent.oid.substring(0, 7)}</code>
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );

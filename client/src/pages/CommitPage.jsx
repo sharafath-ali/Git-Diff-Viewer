@@ -12,7 +12,7 @@ function CommitPage() {
       <div className="page-container">
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p className="loading-text">Loading commit data...</p>
+          <p className="loading-text">Loading commit…</p>
           <p className="loading-subtext">{owner}/{repository}</p>
         </div>
       </div>
@@ -24,7 +24,7 @@ function CommitPage() {
       <div className="page-container">
         <div className="error-container">
           <div className="error-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <circle cx="12" cy="12" r="10" />
               <line x1="15" y1="9" x2="9" y2="15" />
               <line x1="9" y1="9" x2="15" y2="15" />
@@ -40,7 +40,7 @@ function CommitPage() {
     );
   }
 
-  // Calculate stats
+  // Totals for the stats bar
   const stats = (diff || []).reduce(
     (acc, file) => ({
       filesChanged: acc.filesChanged + 1,
@@ -52,12 +52,12 @@ function CommitPage() {
 
   return (
     <div className="page-container">
+      {/* Breadcrumb */}
       <nav className="breadcrumb" id="breadcrumb-nav">
-        <a href="/" className="breadcrumb-home">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="4" />
-            <line x1="1.05" y1="12" x2="7" y2="12" />
-            <line x1="17.01" y1="12" x2="22.96" y2="12" />
+        <a href="/" className="breadcrumb-home" aria-label="Home">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
           </svg>
         </a>
         <span className="breadcrumb-sep">/</span>
@@ -65,31 +65,32 @@ function CommitPage() {
         <span className="breadcrumb-sep">/</span>
         <span className="breadcrumb-item">{repository}</span>
         <span className="breadcrumb-sep">/</span>
-        <span className="breadcrumb-item breadcrumb-active">commit</span>
+        <span className="breadcrumb-active">commit</span>
       </nav>
 
+      {/* Commit header (avatar + message + right-side meta) */}
       {commit && (
-        <CommitHeader
-          commit={commit}
-          owner={owner}
-          repository={repository}
-        />
+        <CommitHeader commit={commit} owner={owner} repository={repository} />
       )}
 
+      {/* Diff stats summary row */}
       <div className="diff-stats-bar" id="diff-stats-bar">
         <div className="diff-stats-info">
           <span className="stats-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <polyline points="14 2 14 8 20 8" />
             </svg>
           </span>
-          <span className="stats-files">{stats.filesChanged} file{stats.filesChanged !== 1 ? 's' : ''} changed</span>
+          <span className="stats-files">
+            {stats.filesChanged} file{stats.filesChanged !== 1 ? 's' : ''} changed
+          </span>
           <span className="stats-additions">+{stats.additions}</span>
           <span className="stats-deletions">-{stats.deletions}</span>
         </div>
       </div>
 
+      {/* Diff viewer */}
       {diff && <DiffViewer files={diff} />}
     </div>
   );
