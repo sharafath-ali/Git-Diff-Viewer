@@ -925,6 +925,174 @@ a:hover {
 /* =========================================
    LOADING & ERROR STATES
    ========================================= */
+
+/* --- Skeleton shimmer keyframe --- */
+@keyframes shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+
+/* Base skeleton block */
+.skeleton {
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    90deg,
+    #e8ecf0 0%,
+    #f4f6f8 40%,
+    #e8ecf0 80%
+  );
+  background-size: 600px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ---- Skeleton: commit header ---- */
+.skeleton-header {
+  display: flex;
+  gap: 16px;
+  padding: 24px 0 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skeleton-header-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+.skeleton-line {
+  height: 14px;
+}
+
+.skeleton-line-title {
+  height: 20px;
+  width: 55%;
+}
+
+.skeleton-line-sm {
+  height: 12px;
+  width: 35%;
+}
+
+.skeleton-header-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: center;
+  min-width: 200px;
+}
+
+.skeleton-header-right .skeleton-line {
+  width: 100%;
+}
+
+.skeleton-header-right .skeleton-line-sm {
+  width: 60%;
+}
+
+/* ---- Skeleton: stats bar ---- */
+.skeleton-stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+/* ---- Skeleton: file cards ---- */
+.skeleton-file-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-white);
+  box-shadow: var(--shadow-xs);
+}
+
+.skeleton-file-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #F6F8FA;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.skeleton-file-body {
+  padding: 0;
+}
+
+.skeleton-diff-row {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-light);
+  height: 22px;
+  overflow: hidden;
+}
+
+.skeleton-diff-row:last-child {
+  border-bottom: none;
+}
+
+.skeleton-ln {
+  width: 44px;
+  min-width: 44px;
+  border-right: 1px solid var(--border-light);
+  flex-shrink: 0;
+}
+
+.skeleton-indicator {
+  width: 22px;
+  min-width: 22px;
+  flex-shrink: 0;
+}
+
+.skeleton-code {
+  flex: 1;
+  margin: 4px 12px;
+  border-radius: 3px;
+  height: 12px;
+  align-self: center;
+}
+
+/* Vary widths for a realistic look */
+.skeleton-diff-row:nth-child(1)  .skeleton-code { width: 78%; }
+.skeleton-diff-row:nth-child(2)  .skeleton-code { width: 55%; background-color: #d5f5e3; }
+.skeleton-diff-row:nth-child(3)  .skeleton-code { width: 65%; background-color: #d5f5e3; }
+.skeleton-diff-row:nth-child(4)  .skeleton-code { width: 42%; }
+.skeleton-diff-row:nth-child(5)  .skeleton-code { width: 90%; background-color: #fde8e8; }
+.skeleton-diff-row:nth-child(6)  .skeleton-code { width: 30%; }
+.skeleton-diff-row:nth-child(7)  .skeleton-code { width: 70%; }
+.skeleton-diff-row:nth-child(8)  .skeleton-code { width: 50%; }
+
+/* Stack of skeleton file cards */
+.skeleton-diff-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Fade-in for the skeleton so it doesn't flash abruptly */
+.skeleton-page {
+  animation: skeletonFadeIn 0.25s ease both;
+}
+
+@keyframes skeletonFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Legacy spinner (kept for fallback use) */
 .loading-container {
   display: flex;
   flex-direction: column;

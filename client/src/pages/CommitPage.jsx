@@ -9,11 +9,64 @@ function CommitPage() {
 
   if (loading) {
     return (
-      <div className="page-container">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p className="loading-text">Loading commit…</p>
-          <p className="loading-subtext">{owner}/{repository}</p>
+      <div className="page-container skeleton-page">
+        {/* Skeleton breadcrumb */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingBottom: 16 }}>
+          <div className="skeleton" style={{ width: 14, height: 14, borderRadius: 3 }} />
+          <div className="skeleton" style={{ width: 6, height: 10, borderRadius: 2 }} />
+          <div className="skeleton skeleton-line" style={{ width: 70 }} />
+          <div className="skeleton" style={{ width: 6, height: 10, borderRadius: 2 }} />
+          <div className="skeleton skeleton-line" style={{ width: 50 }} />
+        </div>
+
+        {/* Skeleton commit header */}
+        <div className="skeleton-header">
+          <div className="skeleton skeleton-avatar" />
+          <div className="skeleton-header-body">
+            <div className="skeleton skeleton-line-title" />
+            <div className="skeleton skeleton-line skeleton-line-sm" />
+          </div>
+          <div className="skeleton-header-right">
+            <div className="skeleton skeleton-line" style={{ width: '80%' }} />
+            <div className="skeleton skeleton-line-sm" />
+            <div className="skeleton skeleton-line skeleton-line-sm" style={{ width: '45%' }} />
+          </div>
+        </div>
+
+        {/* Skeleton stats bar */}
+        <div className="skeleton-stats-bar">
+          <div className="skeleton skeleton-line" style={{ width: 110 }} />
+          <div className="skeleton skeleton-line" style={{ width: 40 }} />
+          <div className="skeleton skeleton-line" style={{ width: 40 }} />
+        </div>
+
+        {/* Skeleton file cards */}
+        <div className="skeleton-diff-viewer">
+          {[8, 5, 6].map((rows, cardIdx) => (
+            <div className="skeleton-file-card" key={cardIdx}>
+              <div className="skeleton-file-header">
+                <div className="skeleton" style={{ width: 12, height: 12, borderRadius: 2 }} />
+                <div className="skeleton" style={{ width: 18, height: 18, borderRadius: 4 }} />
+                <div className="skeleton skeleton-line" style={{ width: `${[42, 30, 55][cardIdx]}%` }} />
+                <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>
+                  <div className="skeleton skeleton-line" style={{ width: 34 }} />
+                  <div className="skeleton skeleton-line" style={{ width: 34 }} />
+                </div>
+              </div>
+              <div className="skeleton-file-body">
+                {/* Hunk header */}
+                <div className="skeleton" style={{ height: 22, borderRadius: 0, margin: 0, width: '100%', opacity: 0.6 }} />
+                {Array.from({ length: rows }).map((_, i) => (
+                  <div className="skeleton-diff-row" key={i}>
+                    <div className="skeleton skeleton-ln" />
+                    <div className="skeleton skeleton-ln" />
+                    <div className="skeleton skeleton-indicator" />
+                    <div className="skeleton skeleton-code" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
