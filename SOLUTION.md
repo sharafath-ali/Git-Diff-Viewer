@@ -69,32 +69,18 @@ The application is stateless by design — it fetches live data from GitHub on e
 **How**: Integrate `highlight.js` or `Prism.js` on the client. Detect language from file extension, apply syntax classes to code tokens.
 **Why**: Makes diffs much more readable, especially for large files with mixed content.
 
-### 3. Commit SHA Autocomplete / Short SHA Support (High Priority)
-**What**: Accept short SHAs (≥7 chars) in the form and resolve them via GitHub's API.
-**How**: GitHub's commits API accepts prefixes. Resolve the short SHA on the backend and redirect to the full SHA URL.
-**Why**: Users typically copy short SHAs from GitHub. Requiring 40 chars is a usability friction point.
-
-### 4. Side-by-Side Diff View (Medium Priority)
+### 3. Side-by-Side Diff View (Medium Priority)
 **What**: Toggle between unified and split-pane diff views.
 **How**: Add a view mode toggle in the UI. Create a `SplitDiffView` component that pairs deletion and addition lines side-by-side.
 **Why**: Some developers prefer side-by-side for complex changes. GitHub itself offers this option.
 
-### 5. File Tree Sidebar (Medium Priority)
+### 4. File Tree Sidebar (Medium Priority)
 **What**: A collapsible sidebar showing all changed files as a tree structure.
 **How**: Group files by directory path, render as a nested tree with expand/collapse. Clicking a file scrolls to its diff.
 **Why**: Easier navigation for commits touching many files across different directories.
 
-### 6. Comprehensive Testing (Medium Priority)
+### 5. Comprehensive Testing (Medium Priority)
 **What**: Unit tests for the diff parser, integration tests for API routes, and component tests.
 **How**: Jest + Supertest for backend. React Testing Library for frontend. Mock GitHub API responses.
 **Why**: Ensures correctness of the diff parsing logic and prevents regressions.
 
-### 7. Error Boundaries & Retry Logic (Low Priority)
-**What**: React error boundaries around each file diff, exponential backoff for failed API calls.
-**How**: Wrap file cards in error boundaries so one failed render doesn't break the whole page. Add retry with backoff to the `useCommit` hook.
-**Why**: Improves resilience for edge cases like malformed patches or temporary GitHub outages.
-
-### 8. URL-based State Management (Low Priority)
-**What**: Persist UI state (expanded/collapsed files, view mode) in URL search params.
-**How**: Use `useSearchParams` from React Router to encode state.
-**Why**: Allows sharing direct links to specific file diffs within a commit.
